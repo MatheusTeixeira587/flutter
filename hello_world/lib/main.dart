@@ -1,18 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hello_world/quiz.dart';
+import 'package:hello_world/result.dart';
 
 void main(List<String> args) => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  int currentIndex = 0;
-  final questions = [
-    "What\'s your favorite color?",
-    "What\'s your favorite animal?",
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int _currentIndex = 0;
+  int _correctAnswers = 0;
+  final _questions = const [
+    {
+      "question": "Who named our planet earth?",
+      "answers": [
+        {"text": "Me", "correct": false},
+        {"text": "Nostradamus", "correct": false},
+        {"text": "We don\'t know", "correct": true},
+      ],
+    },
+    {
+      "question": "Is The Earth Flat?",
+      "answers": [
+        {"text": "i\'m very dumb (yes)", "correct": false},
+        {"text": "No", "correct": true},
+        {"text": "My brain cells die from loneliness (also yes)", "correct": false },
+      ],
+    },
+    {
+      "question": "Can vaccines cause autism?",
+      "answers": [
+        {"text": "i\'m very dumb (yes)", "correct": false},
+        {"text": "No", "correct": true},
+        {"text": "My brain cells die from loneliness (also yes)", "correct": false },
+      ]
+    },
   ];
 
-  void answerQuestion() {
-    print('answer chosen');
-    currentIndex++;
+  void _answerQuestion(bool nailed) {
+    setState(() {
+      _currentIndex++;
+      _correctAnswers += nailed ? 1 : 0;
+    });
+  }
+
+  void _resetQuiz() {
+    setState(() {
+     _currentIndex = 0;
+     _correctAnswers = 0;
+    });
   }
 
   @override
@@ -22,23 +61,13 @@ class MyApp extends StatelessWidget {
       appBar: AppBar(
         title: Text("My quiz!"),
       ),
-      body: Column(
-        children: [
-          Text(questions.elementAt(currentIndex > questions.length ? 0 : currentIndex)),
-          RaisedButton(
-            child: Text("Answer 1 for question $currentIndex"),
-            onPressed: answerQuestion,
-          ),
-          RaisedButton(
-            child: Text("Answer 2 for question $currentIndex"),
-            onPressed: answerQuestion,
-          ),
-          RaisedButton(
-            child: Text("Answer 3 for question $currentIndex"),
-            onPressed: answerQuestion,
-          ),
-        ],
-      ),
+      body: _currentIndex < _questions.length
+          ? Quiz(
+              questions: _questions,
+              questionIndex: _currentIndex,
+              handleAnswerSelected: _answerQuestion,
+            )
+          : Result(_correctAnswers, _resetQuiz),
     ));
   }
 }
