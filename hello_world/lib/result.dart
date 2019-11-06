@@ -13,13 +13,17 @@ class Result extends StatelessWidget {
   Widget build(BuildContext context) => Center(
         child: Column(
           children: [
-            Text(
-              resultPhrase,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            Container(
+              child: Text(
+                resultPhrase,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              width: double.infinity,
+              margin: EdgeInsets.only(top: 280),
             ),
             FlatButton(
-              child: Text("restart!"),
+              child: Text("Restart!"),
               onPressed: resetHandler,
             )
           ],

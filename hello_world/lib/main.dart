@@ -27,7 +27,10 @@ class _MyAppState extends State<MyApp> {
       "answers": [
         {"text": "i\'m very dumb (yes)", "correct": false},
         {"text": "No", "correct": true},
-        {"text": "My brain cells die from loneliness (also yes)", "correct": false },
+        {
+          "text": "My brain cells die from loneliness (also yes)",
+          "correct": false
+        },
       ],
     },
     {
@@ -35,7 +38,10 @@ class _MyAppState extends State<MyApp> {
       "answers": [
         {"text": "i\'m very dumb (yes)", "correct": false},
         {"text": "No", "correct": true},
-        {"text": "My brain cells die from loneliness (also yes)", "correct": false },
+        {
+          "text": "My brain cells die from loneliness (also yes)",
+          "correct": false
+        },
       ]
     },
   ];
@@ -49,8 +55,8 @@ class _MyAppState extends State<MyApp> {
 
   void _resetQuiz() {
     setState(() {
-     _currentIndex = 0;
-     _correctAnswers = 0;
+      _currentIndex = 0;
+      _correctAnswers = 0;
     });
   }
 
