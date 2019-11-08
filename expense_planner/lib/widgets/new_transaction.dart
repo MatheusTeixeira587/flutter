@@ -1,11 +1,52 @@
+import 'package:expense_planner/constants/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class NewTransaction extends StatelessWidget {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+class NewTransaction extends StatefulWidget {
   final Function handleNewTransaction;
 
   NewTransaction(this.handleNewTransaction);
+
+  @override
+  _NewTransactionState createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  DateTime _pickedDate = DateTime.now();
+
+  void _onSubmit() {
+    final titleText = _titleController.text;
+    final amountText = _amountController.text;
+
+    if (titleText.isEmpty ||
+        amountText.isEmpty ||
+        double.tryParse(amountText) == null ||
+        _pickedDate == null) return;
+
+    widget.handleNewTransaction(
+        titleText, double.tryParse(amountText), _pickedDate);
+
+    Navigator.of(context).pop();
+  }
+
+  void _renderDatePicker() {
+    showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now().subtract(Duration(days: 7)),
+        lastDate: DateTime.now(),
+        builder: (ctx, child) {
+          return Theme(child: child, data: Theme.of(context));
+        }).then((picked) {
+      if (picked == null) return;
+
+      setState(() {
+        _pickedDate = picked;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +59,41 @@ class NewTransaction extends StatelessWidget {
             children: <Widget>[
               TextField(
                 decoration: InputDecoration(labelText: "Title"),
-                controller: titleController,
+                controller: _titleController,
               ),
               TextField(
                 decoration: InputDecoration(labelText: "Amount"),
-                controller: amountController,
+                controller: _amountController,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
               ),
-              FlatButton(
+              Container(
+                height: 70,
+                child: Row(
+                  children: <Widget>[
+                    Text(_pickedDate == null
+                        ? "No Date Chosen!"
+                        : "Date: " +
+                            DateFormat(Constants.dateFormat)
+                                .format(_pickedDate)
+                                .toString()),
+                    FlatButton(
+                      child: Text("Chose date",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                          )),
+                      onPressed: _renderDatePicker,
+                    )
+                  ],
+                ),
+              ),
+              RaisedButton(
                 child: Text(
                   "Add Transaction",
-                  style: TextStyle(color: Colors.purple),
                 ),
-                onPressed: () => handleNewTransaction(titleController.text, double.parse(amountController.text)),
+                onPressed: _onSubmit,
+                textColor: Theme.of(context).textTheme.button.color,
+                color: Theme.of(context).primaryColor,
               )
             ],
           ),
