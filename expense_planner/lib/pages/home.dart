@@ -12,6 +12,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Transaction> _transactions = [];
 
+  bool _showChart = false;
+
   List<Transaction> get _recentTransactions => _transactions
       .where((t) => t.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
       .toList();
@@ -36,6 +38,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
     final AppBar appBar = AppBar(
       title: Text("Personal expenses"),
       actions: <Widget>[
@@ -51,17 +56,37 @@ class _HomePageState extends State<HomePage> {
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
+    final Widget _transactionList = Container(
+        height: getAvailableHeight(context) * 0.7,
+        child: TransactionList(_transactions, _removeTransaction));
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-                height: getAvailableHeight(context) * 0.3,
-                child: Chart(_recentTransactions)),
-            Container(
-                height: getAvailableHeight(context) * 0.7,
-                child: TransactionList(_transactions, _removeTransaction))
+            if (!isPortrait)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Show Chart"),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (value) => setState(() => _showChart = value),
+                  )
+                ],
+              ),
+            if (isPortrait)
+              Container(
+                  height: getAvailableHeight(context) * 0.3,
+                  child: Chart(_recentTransactions)),
+            if (isPortrait) _transactionList,
+            if (!isPortrait)
+              _showChart
+                  ? Container(
+                      height: getAvailableHeight(context) * 0.8,
+                      child: Chart(_recentTransactions))
+                  : _transactionList
           ],
         ),
       ),
