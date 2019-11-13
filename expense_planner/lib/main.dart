@@ -1,7 +1,11 @@
 import 'package:expense_planner/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(_MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(_MyApp());
+} 
 
 class _MyApp extends StatelessWidget {
   final ThemeData _appTheme = ThemeData(

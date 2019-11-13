@@ -10,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final List<Transaction> _transactions = [];
 
   List<Transaction> get _recentTransactions => _transactions
@@ -32,35 +31,45 @@ class _HomePageState extends State<HomePage> {
 
   void _startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
-        context: ctx,
-        builder: (_) => NewTransaction(_addNewTransaction));
+        context: ctx, builder: (_) => NewTransaction(_addNewTransaction));
   }
 
   @override
   Widget build(BuildContext context) {
+    final AppBar appBar = AppBar(
+      title: Text("Personal expenses"),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _startAddNewTransaction(context),
+        )
+      ],
+    );
+
+    final Function getAvailableHeight = (BuildContext ctx) =>
+        MediaQuery.of(ctx).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
     return Scaffold(
-          appBar: AppBar(
-            title: Text("Personal expenses"),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => _startAddNewTransaction(context),
-              )
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Chart(_recentTransactions),
-                TransactionList(_transactions, _removeTransaction)
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () => _startAddNewTransaction(context),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        );
+      appBar: appBar,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+                height: getAvailableHeight(context) * 0.3,
+                child: Chart(_recentTransactions)),
+            Container(
+                height: getAvailableHeight(context) * 0.7,
+                child: TransactionList(_transactions, _removeTransaction))
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => _startAddNewTransaction(context),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
   }
 }
