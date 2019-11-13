@@ -3,29 +3,31 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(_MyApp());
-} 
+}
 
 class _MyApp extends StatelessWidget {
-  final ThemeData _appTheme = ThemeData(
-    primarySwatch: Colors.purple,
-    accentColor: Colors.purpleAccent,
-    fontFamily: "Quicksand",
-    textTheme: ThemeData.light().textTheme.copyWith(
-        title: TextStyle(
-            fontFamily: "OpenSans", fontWeight: FontWeight.bold, fontSize: 18),
-        button: TextStyle(color: Colors.white)),
-    appBarTheme: AppBarTheme(
-        textTheme: ThemeData.light().textTheme.copyWith(
-            title: TextStyle(
-                fontFamily: "OpenSans",
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),),
-  );
-
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: "Personal Expenses",
-        theme: _appTheme,
+        theme: ThemeData(
+          primarySwatch: Colors.purple,
+          accentColor: Colors.purpleAccent,
+          fontFamily: "Quicksand",
+          textTheme: ThemeData.light().textTheme.copyWith(
+                title: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                button: TextStyle(color: Colors.white),
+              ),
+          appBarTheme: AppBarTheme(
+            textTheme: ThemeData.light().textTheme.copyWith(
+                title: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
         home: HomePage(),
       );
 }

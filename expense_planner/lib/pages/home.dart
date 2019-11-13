@@ -31,10 +31,8 @@ class _HomePageState extends State<HomePage> {
     setState(() => _transactions.add(tx));
   }
 
-  void _startAddNewTransaction(BuildContext ctx) {
-    showModalBottomSheet(
-        context: ctx, builder: (_) => NewTransaction(_addNewTransaction));
-  }
+  void _startAddNewTransaction(BuildContext ctx) => showModalBottomSheet(
+      context: ctx, builder: (_) => NewTransaction(_addNewTransaction));
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +63,11 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            if (isPortrait)
+              Container(
+                  height: getAvailableHeight(context) * 0.3,
+                  child: Chart(_recentTransactions)),
+            if (isPortrait) _transactionList,
             if (!isPortrait)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -76,11 +79,6 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-            if (isPortrait)
-              Container(
-                  height: getAvailableHeight(context) * 0.3,
-                  child: Chart(_recentTransactions)),
-            if (isPortrait) _transactionList,
             if (!isPortrait)
               _showChart
                   ? Container(
