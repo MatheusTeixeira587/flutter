@@ -1,3 +1,4 @@
 class Constants {
-  static const String dateFormat = "dd/MM/yyyy";
+  static const appTitle = "Personal Expenses";
+  static const dateFormat = "dd/MM/yyyy";
 }

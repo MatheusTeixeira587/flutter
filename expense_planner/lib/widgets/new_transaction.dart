@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:expense_planner/constants/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -51,10 +54,14 @@ class _NewTransactionState extends State<NewTransaction> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-          child: Card(
+      child: Card(
           elevation: 5,
           child: Container(
-            padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+            padding: EdgeInsets.only(
+                top: 10,
+                left: 10,
+                right: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -77,14 +84,24 @@ class _NewTransactionState extends State<NewTransaction> {
                               DateFormat(Constants.dateFormat)
                                   .format(_pickedDate)
                                   .toString()),
-                      FlatButton(
-                        child: Text("Chose date",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
-                            )),
-                        onPressed: _renderDatePicker,
-                      )
+                      Platform.isIOS
+                          ? CupertinoButton(
+                              onPressed: _renderDatePicker,
+                              child: Text(
+                                "Chose date",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ))
+                          : FlatButton(
+                              child: Text("Chose date",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).primaryColor,
+                                  )),
+                              onPressed: _renderDatePicker,
+                            )
                     ],
                   ),
                 ),
