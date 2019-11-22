@@ -23,7 +23,7 @@ class TransactionList extends StatelessWidget {
                       "No Transactions added yet!",
                       style: Theme.of(context).textTheme.title,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
@@ -39,7 +39,9 @@ class TransactionList extends StatelessWidget {
           : ListView.builder(
               itemCount: transactions.length,
               itemBuilder: ((context, index) => Card(
-                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                    key: ValueKey(transactions.elementAt(index).id),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                     elevation: 5,
                     child: ListTile(
                       leading: Container(
@@ -48,7 +50,7 @@ class TransactionList extends StatelessWidget {
                             border: Border.all(
                                 color: Theme.of(context).primaryColor,
                                 width: 2)),
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: FittedBox(
                             child: Text(
                           "\$${transactions.elementAt(index).amount}",
@@ -64,12 +66,12 @@ class TransactionList extends StatelessWidget {
                       trailing: MediaQuery.of(context).size.width > 400
                           ? FlatButton.icon(
                               label: Text("Delete"),
-                              icon: Icon(Icons.delete),
+                              icon: const Icon(Icons.delete),
                               onPressed: () => handleRemoveTransaction(
                                   transactions.elementAt(index).id),
                             )
                           : IconButton(
-                              icon: Icon(Icons.delete),
+                              icon: const Icon(Icons.delete),
                               onPressed: () => handleRemoveTransaction(
                                   transactions.elementAt(index).id),
                             ),

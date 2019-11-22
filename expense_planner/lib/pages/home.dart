@@ -37,85 +37,97 @@ class _HomePageState extends State<HomePage> {
   void _startAddNewTransaction(BuildContext ctx) => showModalBottomSheet(
       context: ctx, builder: (_) => NewTransaction(_addNewTransaction));
 
+  Widget _buildCupertinoAppBar() => CupertinoNavigationBar(
+        middle: const Text(Constants.appTitle),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            GestureDetector(
+              child: const Icon(CupertinoIcons.add),
+              onTap: () => _startAddNewTransaction(context),
+            )
+          ],
+        ),
+      );
+
+  Widget _buildMaterialAppBar() => AppBar(
+        title: const Text(Constants.appTitle),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => _startAddNewTransaction(context),
+          )
+        ],
+      );
+
+  Widget _buildBody(
+          double avalaibleHeight, bool isPortrait, Widget transactionList) =>
+      SafeArea(
+          child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            ..._buildPortraitBody(avalaibleHeight, transactionList),
+            ..._buildLandscapeBody(avalaibleHeight),
+          ],
+        ),
+      ));
+
+  List<Widget> _buildPortraitBody(
+          double avalaibleHeight, Widget transactionList) =>
+      [
+        Container(
+            height: avalaibleHeight * 0.3, child: Chart(_recentTransactions)),
+        transactionList
+      ];
+
+  List<Widget> _buildLandscapeBody(double availableHeight) => [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text("Show Chart"),
+            Switch.adaptive(
+              activeColor: Theme.of(context).accentColor,
+              value: _showChart,
+              onChanged: (value) => setState(() => _showChart = value),
+            )
+          ],
+        ),
+        _showChart
+            ? Container(
+                height: availableHeight * 0.8,
+                child: Chart(_recentTransactions))
+            : _transactions
+      ];
   @override
   Widget build(BuildContext context) {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+    final mediaQuery = MediaQuery.of(context);
+    final isPortrait = mediaQuery.orientation == Orientation.portrait;
 
-    final AppBar appBar = Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: Text(Constants.appTitle),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                GestureDetector(
-                  child: Icon(CupertinoIcons.add),
-                  onTap: () => _startAddNewTransaction(context),
-                )
-              ],
-            ),
-          )
-        : AppBar(
-            title: Text(Constants.appTitle),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => _startAddNewTransaction(context),
-              )
-            ],
-          );
+    final AppBar appBar =
+        Platform.isIOS ? _buildCupertinoAppBar() : _buildMaterialAppBar();
 
     final getAvailableHeight = (BuildContext ctx) =>
-        MediaQuery.of(ctx).size.height -
+        mediaQuery.size.height -
         appBar.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+        mediaQuery.padding.top;
 
     final _transactionList = Container(
         height: getAvailableHeight(context) * 0.7,
         child: TransactionList(_transactions, _removeTransaction));
 
-    final _body = SafeArea(
-        child: SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          if (isPortrait)
-            Container(
-                height: getAvailableHeight(context) * 0.3,
-                child: Chart(_recentTransactions)),
-          if (isPortrait) _transactionList,
-          if (!isPortrait)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text("Show Chart"),
-                Switch.adaptive(
-                  activeColor: Theme.of(context).accentColor,
-                  value: _showChart,
-                  onChanged: (value) => setState(() => _showChart = value),
-                )
-              ],
-            ),
-          if (!isPortrait)
-            _showChart
-                ? Container(
-                    height: getAvailableHeight(context) * 0.8,
-                    child: Chart(_recentTransactions))
-                : _transactionList
-        ],
-      ),
-    ));
-
     return Platform.isIOS
         ? CupertinoPageScaffold(
-            child: _body,
+            child: _buildBody(
+                getAvailableHeight(context), isPortrait, _transactionList),
           )
         : Scaffold(
             appBar: appBar,
-            body: _body,
+            body: _buildBody(
+                getAvailableHeight(context), isPortrait, _transactionList),
             floatingActionButton: Platform.isIOS
                 ? null
                 : FloatingActionButton(
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                     onPressed: () => _startAddNewTransaction(context),
                   ),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

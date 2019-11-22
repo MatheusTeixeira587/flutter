@@ -14,15 +14,15 @@ class _MyApp extends StatelessWidget {
           accentColor: Colors.purpleAccent,
           fontFamily: "Quicksand",
           textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
+                title: const TextStyle(
                     fontFamily: "OpenSans",
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
-                button: TextStyle(color: Colors.white),
+                button: const TextStyle(color: Colors.white),
               ),
           appBarTheme: AppBarTheme(
             textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
+                title: const TextStyle(
                     fontFamily: "OpenSans",
                     fontSize: 20,
                     fontWeight: FontWeight.bold)),
