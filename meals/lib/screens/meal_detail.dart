@@ -4,21 +4,15 @@ import 'package:meals/mocks/dart/dummy-data.dart';
 class MealDetailScreen extends StatelessWidget {
   static const routeName = "/meal-detail";
 
+  final Function(String) toogleFavorite;
+  final Function(String) isFavorite;
+
+  const MealDetailScreen({Key key, this.toogleFavorite, this.isFavorite})
+      : super(key: key);
+
   Widget buildSectionTitle(String title, ThemeData theme) => Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Text(title, style: theme.textTheme.title));
-
-  Widget buildListContainer(ListView list) => Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(10),
-        height: 200,
-        width: 300,
-        child: list,
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -38,36 +32,46 @@ class MealDetailScreen extends StatelessWidget {
                   fit: BoxFit.cover,
                 )),
             buildSectionTitle("Ingredients", _theme),
-            buildListContainer(
-              ListView.builder(
-                itemCount: _meal.ingredients.length,
-                itemBuilder: (ctx, index) => Card(
-                  color: _theme.accentColor,
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      child: Text(_meal.ingredients.elementAt(index))),
-                ),
-              ),
-            ),
+            ..._meal.ingredients.map((ingredient) => Card(
+                color: _theme.accentColor,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  child: Container(
+                      height: 30,
+                      width: 250,
+                      child: Center(child: Text(ingredient))),
+                ))),
             buildSectionTitle("Steps", _theme),
-            buildListContainer(ListView.builder(
-              itemCount: _meal.steps.length,
-              itemBuilder: (ctx, index) => Column(
-                children: [
-                  ListTile(
-                    leading: CircleAvatar(
-                      child: Text("# ${index + 1}"),
-                    ),
-                    title: Text(_meal.steps.elementAt(index)),
+            ..._meal.steps.map((step) {
+              final index = _meal.steps.indexOf(step);
+              return Column(children: [
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Center(child: Text("# ${index + 1}")),
                   ),
-                  Divider()
-                ],
-              ),
-            ))
+                  title: Text(step),
+                ),
+                const Divider()
+              ]);
+            }),
+            Padding(
+              padding: const EdgeInsets.all(35),
+            )
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          isFavorite(_mealId) ? Icons.star : Icons.star_border,
+        ),
+        onPressed: () => toogleFavorite(_mealId),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
+
+/*
+
+*/

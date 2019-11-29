@@ -56,7 +56,7 @@ class MealItem extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         elevation: 4,
-        margin: const EdgeInsets.all(4),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         child: Column(
           children: <Widget>[
             Stack(

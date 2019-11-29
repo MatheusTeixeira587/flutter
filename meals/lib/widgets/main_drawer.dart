@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:meals/screens/filters.dart';
+import 'package:meals/screens/tabs.dart';
 
 class MainDrawer extends StatelessWidget {
   _buildListTile(String title, IconData icon, Function onTap) => ListTile(
@@ -25,7 +27,7 @@ class MainDrawer extends StatelessWidget {
           Container(
             height: 120,
             width: double.infinity,
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             alignment: Alignment.centerLeft,
             color: _theme.accentColor,
             child: Center(
@@ -38,11 +40,19 @@ class MainDrawer extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          _buildListTile("Meals", Icons.restaurant, () => null),
-          _buildListTile("Settings", Icons.settings, () => null),
+          _buildListTile(
+              "Meals",
+              Icons.restaurant,
+              () => Navigator.of(context)
+                  .pushReplacementNamed(TabsScreen.routeName)),
+          _buildListTile(
+              "Settings",
+              Icons.settings,
+              () => Navigator.of(context)
+                  .pushReplacementNamed(FiltersScreen.routeName)),
         ],
       ),
     );
