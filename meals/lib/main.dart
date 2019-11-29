@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meals/screens/categories.dart';
 import 'package:meals/screens/category_meals.dart';
 import 'package:meals/screens/meal_detail.dart';
+import 'package:meals/screens/tabs.dart';
 
 import 'constants/constants.dart';
 
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: Constants.appName,
       theme: ThemeData(
           primarySwatch: Colors.red,
@@ -26,12 +28,12 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.bold))),
       initialRoute: CategoriesScreen.routeName,
       routes: {
-        CategoriesScreen.routeName: (ctx) => CategoriesScreen(),
+        TabsScreen.routeName: (ctx) => TabsScreen(),
         CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen()
       },
       onUnknownRoute: (setting) =>
-          MaterialPageRoute(builder: (ctx) => CategoriesScreen()),
+          MaterialPageRoute(builder: (ctx) => TabsScreen()),
     );
   }
 }
